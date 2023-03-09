@@ -213,6 +213,16 @@ def apply_color_lut(
 
     return out
 
+def check_lut_sequence_value_vaild(ds, tagName):
+    if ds.get(tagName):
+        ds[tagName] = cast(List["Dataset"], ds[tagName])
+        
+        return None not in [
+            ds[tagName][0].get('LUTDescriptor', None),
+            ds[tagName][0].get('LUTData', None)
+        ]
+
+    return False
 
 def apply_modality_lut(arr: "np.ndarray", ds: "Dataset") -> "np.ndarray":
     """Apply a modality lookup table or rescale operation to `arr`.
@@ -254,7 +264,7 @@ def apply_modality_lut(arr: "np.ndarray", ds: "Dataset") -> "np.ndarray":
     * DICOM Standard, Part 4, :dcm:`Annex N.2.1.1
       <part04/sect_N.2.html#sect_N.2.1.1>`
     """
-    if ds.get("ModalityLUTSequence"):
+    if check_lut_sequence_value_vaild(ds, "ModalityLUTSequence"):
         item = cast(List["Dataset"], ds.ModalityLUTSequence)[0]
         nr_entries = cast(List[int], item.LUTDescriptor)[0] or 2**16
         first_map = cast(List[int], item.LUTDescriptor)[1]
@@ -540,7 +550,7 @@ def apply_windowing(
     ds.BitsStored = cast(int, ds.BitsStored)
     y_min: float
     y_max: float
-    if ds.get('ModalityLUTSequence'):
+    if check_lut_sequence_value_vaild(ds, 'ModalityLUTSequence'):
         # Unsigned - see PS3.3 C.11.1.1.1
         y_min = 0
         item = cast(List["Dataset"], ds.ModalityLUTSequence)[0]
