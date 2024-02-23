@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dcm2png"
-version = "0.2.0"
+version = "0.3.0"
 description = "extract png image from dicom"
 authors = ["cp949 <codepage949@gmail.com>"]
 

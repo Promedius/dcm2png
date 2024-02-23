@@ -304,7 +304,7 @@ def apply_voi_lut(
     arr: "np.ndarray",
     ds: "Dataset",
     index: int = 0,
-    prefer_lut: bool = True
+    prefer_lut: bool = False
 ) -> "np.ndarray":
     """Apply a VOI lookup table or windowing operation to `arr`.
 
